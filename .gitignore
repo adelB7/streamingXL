@@ -1,0 +1,9 @@
+# Ignorer les fichiers sensibles
+*.retry
+*.log
+*~
+*.bak
+
+# Ignorer les données sensibles
+~/traefik/acme.json
+~/openvpn-data/*
