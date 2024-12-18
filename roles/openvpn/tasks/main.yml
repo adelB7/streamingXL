@@ -1,0 +1,46 @@
+---
+- name: Créer le réseau Docker pour OpenVPN
+  docker_network:
+    name: vpn-net
+
+- name: Créer le répertoire pour OpenVPN
+  file:
+    path: ~/openvpn-data
+    state: directory
+    mode: '0755'
+
+- name: Initialiser la configuration OpenVPN
+  shell: |
+    docker run -v ~/openvpn-data:/etc/openvpn --rm kylemanna/openvpn ovpn_genconfig -u udp://streameurxl.adxl697.ovh
+    docker run -v ~/openvpn-data:/etc/openvpn --rm -it kylemanna/openvpn ovpn_initpki
+  args:
+    executable: /bin/bash
+
+- name: Lancer le conteneur OpenVPN
+  docker_container:
+    name: openvpn
+    image: kylemanna/openvpn
+    networks:
+      - vpn-net
+    published_ports:
+      - 1194:1194/udp
+    volumes:
+      - ~/openvpn-data:/etc/openvpn
+    capabilities:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    state: started
+    restart_policy: always
+
+- name: Générer un utilisateur VPN
+  shell: |
+    docker run -v ~/openvpn-data:/etc/openvpn --rm kylemanna/openvpn easyrsa build-client-full UsersXL nopass
+  args:
+    executable: /bin/bash
+
+- name: Exporter le fichier de configuration VPN
+  shell: |
+    docker run -v ~/openvpn-data:/etc/openvpn --rm kylemanna/openvpn ovpn_getclient UsersXL > ~/UsersXL.ovpn
+  args:
+    executable: /bin/bash

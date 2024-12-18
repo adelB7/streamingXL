@@ -1,0 +1,38 @@
+---
+- name: Créer le réseau Docker pour Traefik
+  docker_network:
+    name: stream-net
+
+- name: Créer le répertoire pour Traefik
+  file:
+    path: ~/traefik
+    state: directory
+    mode: '0755'
+
+- name: Copier le fichier de configuration traefik.yml
+  copy:
+    src: traefik.yml
+    dest: ~/traefik/traefik.yml
+
+- name: Créer le fichier acme.json
+  copy:
+    content: ""
+    dest: ~/traefik/acme.json
+    mode: '0600'
+
+- name: Lancer le conteneur Traefik
+  docker_container:
+    name: traefik
+    image: traefik:v2.10
+    networks:
+      - stream-net
+    published_ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/traefik/traefik.yml:/etc/traefik/traefik.yml
+      - ~/traefik/acme.json:/letsencrypt/acme.json
+    state: started
+    restart_policy: always
