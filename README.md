@@ -63,6 +63,36 @@ Pour que **Jellyfin** puisse accéder à vos fichiers multimédias, modifiez le 
 
 ---
 
+## Configuration des Noms de Domaine
+
+### **1. Jellyfin**
+Pour utiliser votre propre nom de domaine avec Jellyfin, modifiez le rôle **Traefik** dans le fichier suivant :
+- `roles/jellyfin/tasks/main.yml`
+
+Recherchez la configuration des **labels** et remplacez le domaine par le vôtre :
+```yaml
+labels:
+  traefik.enable: "true"
+  traefik.http.routers.jellyfin.entrypoints: "websecure"
+  traefik.http.routers.jellyfin.rule: "Host(\"votre-domaine-jellyfin.com\")"
+  traefik.http.routers.jellyfin.tls.certresolver: "myresolver"
+  traefik.http.services.jellyfin.loadbalancer.server.port: "8096"
+
+### **2. OpenVPN**
+
+Pour utiliser votre propre nom de domaine avec OpenVPN, modifiez le rôle **OpenVPN** dans le fichier suivant :
+- `roles/openvpn/tasks/main.yml`
+
+Recherchez la commande de configuration et remplacez le domaine par le vôtre :
+```yaml
+- name: Initialiser la configuration OpenVPN
+  shell: |
+    docker run -v /home/ansible/openvpn-data:/etc/openvpn --rm kylemanna/openvpn ovpn_genconfig -u udp://votre-domaine-vpn.com
+  args:
+    executable: /bin/bash
+
+---
+
 ## Utilisation
 
 1. Configurez l'inventaire dans le fichier `inventory` en ajoutant les informations de votre serveur.
