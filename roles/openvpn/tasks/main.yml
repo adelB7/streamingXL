@@ -5,14 +5,14 @@
 
 - name: Créer le répertoire pour OpenVPN
   file:
-    path: /home/adminxl/openvpn-data
+    path: /ServeurXL/openvpn-data
     state: directory
     mode: '0755'
 
 - name: Initialiser la configuration OpenVPN
   shell: |
-    docker run -v /home/adminxl/openvpn-data:/etc/openvpn --rm kylemanna/openvpn ovpn_genconfig -u udp://streameurxl.adxl697.ovh
-    docker run -v /home/adminxl/openvpn-data:/etc/openvpn --rm \
+    docker run -v /ServeurXL/openvpn-data:/etc/openvpn --rm kylemanna/openvpn ovpn_genconfig -u udp://streameurxl.adxl697.ovh
+    docker run -v /ServeurXL/openvpn-data:/etc/openvpn --rm \
       -e EASYRSA_BATCH=1 \
       -e EASYRSA_REQ_CN=streameurxl.adxl697.ovh \
       kylemanna/openvpn ovpn_initpki nopass
@@ -28,7 +28,7 @@
     published_ports:
       - 1194:1194/udp
     volumes:
-      - /home/adminxl/openvpn-data:/etc/openvpn
+      - /ServeurXL/openvpn-data:/etc/openvpn
     capabilities:
       - NET_ADMIN
     devices:
@@ -38,12 +38,12 @@
 
 - name: Générer un utilisateur VPN
   shell: |
-    docker run -v /home/adminxl/openvpn-data:/etc/openvpn --rm kylemanna/openvpn easyrsa build-client-full UsersXL nopass
+    docker run -v /ServeurXL/openvpn-data:/etc/openvpn --rm kylemanna/openvpn easyrsa build-client-full UsersXL nopass
   args:
     executable: /bin/bash
 
 - name: Exporter le fichier de configuration VPN
   shell: |
-    docker run -v /home/adminxl/openvpn-data:/etc/openvpn --rm kylemanna/openvpn ovpn_getclient UsersXL > /home/adminxl/UsersXL.ovpn
+    docker run -v /ServeurXL/openvpn-data:/etc/openvpn --rm kylemanna/openvpn ovpn_getclient UsersXL > /ServeurXL/UsersXL.ovpn
   args:
     executable: /bin/bash

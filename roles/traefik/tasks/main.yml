@@ -5,20 +5,20 @@
 
 - name: Créer le répertoire pour Traefik
   file:
-    path: /home/adminxl/traefik
+    path: /ServeurXL/traefik
     state: directory
     mode: '0755'
 
 - name: Copier le fichier de configuration traefik.yml
   copy:
     src: traefik.yml
-    dest: /home/adminxl/traefik/traefik.yml
+    dest: /ServeurXL/traefik/traefik.yml
     mode: '0644'
 
 - name: Créer le fichier acme.json
   copy:
     content: ""
-    dest: /home/adminxl/traefik/acme.json
+    dest: /ServeurXL/traefik/acme.json
     mode: '0600'
 
 - name: Lancer le conteneur Traefik
@@ -33,7 +33,7 @@
       - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /home/adminxl/traefik/traefik.yml:/etc/traefik/traefik.yml
-      - /home/adminxl/traefik/acme.json:/letsencrypt/acme.json
+      - /ServeurXL/traefik/traefik.yml:/etc/traefik/traefik.yml
+      - /ServeurXL/traefik/acme.json:/letsencrypt/acme.json
     state: started
     restart_policy: always
