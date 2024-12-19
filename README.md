@@ -69,4 +69,4 @@ Pour que **Jellyfin** puisse accéder à vos fichiers multimédias, modifiez le 
 
 2. Lancez le playbook avec la commande suivante :
    ```bash
-   ansible-playbook -i inventory playbook.yml
+   sudo ansible-playbook -i inventory playbook.yml
