@@ -1,16 +1,54 @@
 # StreamingXL Ansible
+
 Ce projet utilise Ansible pour automatiser le déploiement de services de streaming et VPN :
 - **Traefik** : Proxy inverse pour gérer HTTPS et le routage.
 - **Jellyfin** : Serveur de streaming multimédia.
 - **OpenVPN** : VPN pour sécuriser l'accès aux services.
 
+## Prérequis
+
+Avant de commencer, assurez-vous que les éléments suivants sont configurés :
+
+1. **Logiciels installés** :
+   - Docker : [Installation Docker](https://docs.docker.com/get-docker/)
+   - Ansible : [Installation Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
+
+2. **Nom de domaine** :
+   - Un nom de domaine doit pointer vers votre **adresse IP publique** (exemple : `streameurxl.adxl697.ovh`).
+
+3. **Redirection des ports** :
+   - Configurez votre routeur pour rediriger les ports suivants vers votre serveur :
+     - **80** : HTTP
+     - **443** : HTTPS
+     - **1194** : VPN (UDP)
+
+4. **Configuration réseau sur le serveur (si Ubuntu)** :
+   - Autorisez les ports nécessaires dans le pare-feu :
+     ```bash
+     sudo ufw allow 80
+     sudo ufw allow 443
+     sudo ufw allow 1194
+     ```
+   - Vérifiez que l'interface TUN/TAP est active :
+     ```bash
+     ls -l /dev/net/tun
+     ```
+     Si le périphérique n'existe pas, créez-le :
+     ```bash
+     sudo chmod 600 /dev/net/tun
+     sudo modprobe tun
+     ```
+
 ## Structure
+
 - `roles/traefik` : Installation et configuration de Traefik.
 - `roles/jellyfin` : Installation et configuration de Jellyfin.
 - `roles/openvpn` : Installation et configuration d'OpenVPN.
 
 ## Utilisation
-1. Configurez l'inventaire dans `inventory`.
-2. Lancez le playbook :
+
+1. Configurez l'inventaire dans le fichier `inventory` en ajoutant les informations de votre serveur.
+
+2. Lancez le playbook avec la commande suivante :
    ```bash
    ansible-playbook -i inventory playbook.yml
