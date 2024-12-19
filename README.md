@@ -5,6 +5,8 @@ Ce projet utilise Ansible pour automatiser le déploiement de services de stream
 - **Jellyfin** : Serveur de streaming multimédia.
 - **OpenVPN** : VPN pour sécuriser l'accès aux services.
 
+---
+
 ## Prérequis
 
 Avant de commencer, assurez-vous que les éléments suivants sont configurés :
@@ -39,11 +41,27 @@ Avant de commencer, assurez-vous que les éléments suivants sont configurés :
      sudo modprobe tun
      ```
 
+---
+
+## Configuration des Fichiers Multimédias
+
+Pour que **Jellyfin** puisse accéder à vos fichiers multimédias, modifiez le chemin du volume dans le rôle `jellyfin` pour qu’il corresponde à l’emplacement où vos fichiers sont stockés sur votre serveur.
+
+1. **Chemin par défaut dans le rôle** :
+   Dans `roles/jellyfin/tasks/main.yml`, le volume de fichiers multimédias est configuré par défaut comme suit :
+   ```yaml
+   volumes:
+     - /media/sf_Film:/media
+
+---
+
 ## Structure
 
 - `roles/traefik` : Installation et configuration de Traefik.
 - `roles/jellyfin` : Installation et configuration de Jellyfin.
 - `roles/openvpn` : Installation et configuration d'OpenVPN.
+
+---
 
 ## Utilisation
 
