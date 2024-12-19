@@ -77,7 +77,7 @@ labels:
   traefik.http.routers.jellyfin.rule: "Host(\"votre-domaine-jellyfin.com\")"
   traefik.http.routers.jellyfin.tls.certresolver: "myresolver"
   traefik.http.services.jellyfin.loadbalancer.server.port: "8096"
-
+  ```
 ### **2. OpenVPN**
 
 Pour utiliser votre propre nom de domaine avec OpenVPN, modifiez le rôle **OpenVPN** dans le fichier suivant :
@@ -90,7 +90,7 @@ Recherchez la commande de configuration et remplacez le domaine par le vôtre :
     docker run -v /home/ansible/openvpn-data:/etc/openvpn --rm kylemanna/openvpn ovpn_genconfig -u udp://votre-domaine-vpn.com
   args:
     executable: /bin/bash
-
+  ```
 ---
 
 ## Utilisation
