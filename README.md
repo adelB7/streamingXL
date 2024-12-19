@@ -87,7 +87,7 @@ Recherchez la commande de configuration et remplacez le domaine par le vôtre :
 ```yaml
 - name: Initialiser la configuration OpenVPN
   shell: |
-    docker run -v /home/ansible/openvpn-data:/etc/openvpn --rm kylemanna/openvpn ovpn_genconfig -u udp://votre-domaine-vpn.com
+    docker run -v /ServeurXL/openvpn-data:/etc/openvpn --rm kylemanna/openvpn ovpn_genconfig -u udp://votre-domaine-vpn.com
   args:
     executable: /bin/bash
   ```
@@ -100,3 +100,9 @@ Recherchez la commande de configuration et remplacez le domaine par le vôtre :
 2. Lancez le playbook avec la commande suivante :
    ```bash
    sudo ansible-playbook -i inventory playbook.yml
+   ```
+3. Récuperer le fichier client **UsersXL** et le configurer dans un client OpenVPN.
+
+---
+
+## Enjoy
